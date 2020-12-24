@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class TransactionDetailsTable extends Migration
+class CreateTransactionDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,8 +12,8 @@ class TransactionDetailsTable extends Migration
      * @return void
      */
     public function up()
-    {   
-        Schema::create('transactions_details', function (Blueprint $table) {
+    {
+        Schema::create('transaction_details', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('transactions_id');
             $table->integer('products_id');
@@ -30,6 +30,6 @@ class TransactionDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions_details');
+        Schema::dropIfExists('transaction_details');
     }
 }
