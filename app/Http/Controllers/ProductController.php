@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers;
 
+Use App\Models\Product;
+Use App\Http\Requests\ProductRequest;
+
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 class ProductController extends Controller
 {
@@ -13,7 +19,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return view('pages.products.index');
+        $items = Product::all();
+
+        return view('pages.products.index')->with([
+            'items' => $items
+        ]);
     }
 
     /**
@@ -23,7 +33,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.products.create');
     }
 
     /**
@@ -34,7 +44,19 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+
+        $request->validate([
+            'name' => 'required|max:255',
+            'type' => 'required|max:255',
+            'description' => 'required',
+            'price' => 'required|integer',
+            'quantity' => 'required|integer'
+        ]);
+        $data['slug'] = Str::slug($request->name);
+
+        Product::create($data);
+        return redirect()->route('products.index');
     }
 
     /**
@@ -56,7 +78,11 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        //
+        $item =Product::findOrFail($id);
+
+        return view('pages.products.edit')->with([
+            'item' => $item
+        ]);
     }
 
     /**
@@ -68,7 +94,20 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request->all();
+
+        $request->validate([
+            'name' => 'required|max:255',
+            'type' => 'required|max:255',
+            'description' => 'required',
+            'price' => 'required|integer',
+            'quantity' => 'required|integer'
+        ]);
+        $data['slug'] = Str::slug($request->name);
+
+        $item = Product::findOrFail($id);
+        $item->update($data);
+        return redirect()->route('products.index');
     }
 
     /**
@@ -79,6 +118,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $item = Product::findOrFail($id);
+        $item->delete();
+
+        return redirect()->route('products.index');
     }
 }
