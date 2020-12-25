@@ -36,7 +36,7 @@
     </div>
     @stack('before-script')
   {{-- script --}}
-  @stack('after-script')
   @include('includes.script')
+  @stack('after-script')
 </body>
 </html>
